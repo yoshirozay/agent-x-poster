@@ -28,7 +28,7 @@ export async function runAuth() {
           reject(new Error("Invalid callback"));
           return;
         }
-        const { accessToken, refreshToken } = await app.loginWithOAuth2({
+        const { accessToken, refreshToken, expiresIn } = await app.loginWithOAuth2({
           code,
           codeVerifier,
           redirectUri,
@@ -38,6 +38,7 @@ export async function runAuth() {
         saveStored({
           access_token: accessToken,
           refresh_token: refreshToken,
+          expires_at: expiresIn ? Date.now() + expiresIn * 1000 : null,
           user_id: me.data?.id,
           username: me.data?.username,
         });

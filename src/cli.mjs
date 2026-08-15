@@ -1,23 +1,27 @@
 #!/usr/bin/env node
 import { readFileSync, existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { runAuth } from "./auth.mjs";
-import { getAuthedClient, failJson } from "./client.mjs";
+import { getAuthedClient, getUsername, fetchMe, failJson } from "./client.mjs";
 
 function loadDotenv() {
-  const p = resolve(process.cwd(), ".env");
-  if (!existsSync(p)) return;
-  for (const line of readFileSync(p, "utf8").split(/\r?\n/)) {
-    const t = line.trim();
-    if (!t || t.startsWith("#")) continue;
-    const i = t.indexOf("=");
-    if (i === -1) continue;
-    const k = t.slice(0, i).trim();
-    let v = t.slice(i + 1).trim();
-    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
-      v = v.slice(1, -1);
+  const pkgRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  const paths = [...new Set([resolve(process.cwd(), ".env"), resolve(pkgRoot, ".env")])];
+  for (const p of paths) {
+    if (!existsSync(p)) continue;
+    for (const line of readFileSync(p, "utf8").split(/\r?\n/)) {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) continue;
+      const i = t.indexOf("=");
+      if (i === -1) continue;
+      const k = t.slice(0, i).trim();
+      let v = t.slice(i + 1).trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+        v = v.slice(1, -1);
+      }
+      if (process.env[k] == null) process.env[k] = v;
     }
-    if (process.env[k] == null) process.env[k] = v;
   }
 }
 
@@ -63,7 +67,7 @@ try {
 
   if (cmd === "whoami") {
     const client = await getAuthedClient();
-    const me = await client.v2.me();
+    const me = await fetchMe(client);
     console.log(JSON.stringify({
       ok: true,
       username: me.data?.username,
@@ -78,9 +82,8 @@ try {
     if (!text) throw new Error("Usage: agent-x-poster post --text \"...\"");
     const client = await getAuthedClient();
     const posted = await client.v2.tweet(text);
-    const me = await client.v2.me();
+    const username = await getUsername(client);
     const id = posted.data?.id;
-    const username = me.data?.username;
     console.log(JSON.stringify({
       ok: true,
       tweet_id: id,
@@ -104,8 +107,7 @@ try {
       replyTo = posted.data?.id;
       ids.push(replyTo);
     }
-    const me = await client.v2.me();
-    const username = me.data?.username;
+    const username = await getUsername(client);
     console.log(JSON.stringify({
       ok: true,
       tweet_ids: ids,
