@@ -1,6 +1,13 @@
 import http from "node:http";
 import { TwitterApi } from "twitter-api-v2";
+import { execFile } from "node:child_process";
 import { appCreds, callbackPort, callbackUrl, saveStored, SCOPES } from "./config.mjs";
+
+function openBrowser(url) {
+  const cmd = process.platform === "darwin" ? "open" : process.platform === "win32" ? "cmd" : "xdg-open";
+  const args = process.platform === "win32" ? ["/c", "start", "", url] : [url];
+  execFile(cmd, args, () => {});
+}
 
 export async function runAuth() {
   const { clientId, clientSecret } = appCreds();
@@ -60,6 +67,7 @@ export async function runAuth() {
 
     server.listen(callbackPort(), "127.0.0.1", () => {
       console.log(JSON.stringify({ ok: true, stage: "waiting", authorize_url: url }));
+      openBrowser(url);
     });
 
     setTimeout(() => {

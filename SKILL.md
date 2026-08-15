@@ -14,9 +14,10 @@ Do not put secrets in chat.
 1. Treat chat as the interface. If they say what to post, draft the exact text in chat and wait.
 2. Always confirm the exact post text (and that it should go out now) before posting.
 3. Never print access tokens, refresh tokens, client secrets, `.env`, or `~/.config/agent-x-poster/credentials.json`.
-4. If not connected, run `auth` and tell the user to approve the X page. Do not ask them to paste secrets into chat.
-5. HTTP 402 / credits depleted: tell them to top up X API credits. Do not retry in a loop.
-6. After a successful post, give them the `url` from the JSON output.
+4. First run `npx agent-x-poster status`. If `client_id_set` or `client_secret_set` is false, run `npx agent-x-poster setup` and tell them a local page opened. They paste Client ID and Client Secret there, not in chat. Do not run `auth` until `status` shows both set. Do not ask them to paste secrets into chat.
+5. If those are set and `connected` is false, run `auth` and tell the user to approve the X page.
+6. HTTP 402 / credits depleted: tell them to top up X API credits. Do not retry in a loop.
+7. After a successful post, give them the `url` from the JSON output.
 
 ## Chat
 
@@ -30,6 +31,8 @@ Write the exact text back. Wait for a yes. Then run the CLI.
 
 ## Commands (you run these, not them)
 
+    npx agent-x-poster status
+    npx agent-x-poster setup
     npx agent-x-poster auth
     npx agent-x-poster whoami
     npx agent-x-poster post --text "exact text"

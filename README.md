@@ -26,13 +26,17 @@ npm install
 4. Website URL: any `https://` URL you own.
 5. Copy the OAuth 2.0 **Client ID** and **Client Secret**.
 
+## 2. Save the keys on this computer
+
 ```bash
-cp .env.example .env
+npx agent-x-poster setup
 ```
 
-Fill `X_CLIENT_ID` and `X_CLIENT_SECRET`.
+A local page opens. Paste the Client ID and Client Secret there. It writes `.env` on your machine. Do not paste those values into chat.
 
-## 2. Load credits
+Do not run `auth` until both are saved. Empty values make X show "You weren't able to give access to the App."
+
+## 3. Load credits
 
 Open Billing in the [Developer Console](https://console.x.com). Add a payment method and buy credits.
 
@@ -42,7 +46,7 @@ Right now X charges **$0.015 per post**, or **$0.20** if the post contains a URL
 
 Buy a small amount to start. A few dollars covers a lot of plain posts.
 
-## 3. Connect your account
+## 4. Connect your account
 
 ```bash
 npx agent-x-poster auth
@@ -50,7 +54,7 @@ npx agent-x-poster auth
 
 Approve the X page in the browser. Tokens are stored in `~/.config/agent-x-poster/credentials.json` (mode 0600), not in this repo. An existing `~/.config/grok-x-poster` folder still works.
 
-## 4. Post from chat
+## 5. Post from chat
 
 Talk to the bot the way you talk to a person.
 

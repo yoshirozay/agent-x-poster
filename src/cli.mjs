@@ -3,7 +3,9 @@ import { readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runAuth } from "./auth.mjs";
+import { runSetup } from "./setup.mjs";
 import { getAuthedClient, getUsername, fetchMe, failJson } from "./client.mjs";
+import { appCredsState, loadStored } from "./config.mjs";
 
 function loadDotenv() {
   const pkgRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -42,6 +44,8 @@ function argsAll(name) {
 function usage() {
   return `agent-x-poster
 
+  setup                        Open a local page to save Client ID and Secret
+  status                       Check .env and whether an account is connected
   auth                         Connect an X account
   whoami                       Print the connected username
   post --text "..."            Publish a post
@@ -56,6 +60,28 @@ const cmd = process.argv[2] || "help";
 try {
   if (cmd === "help" || cmd === "--help" || cmd === "-h") {
     console.log(usage());
+    process.exit(0);
+  }
+
+  if (cmd === "setup") {
+    const saved = await runSetup();
+    const result = await runAuth();
+    console.log(JSON.stringify({ ...saved, ...result }));
+    process.exit(0);
+  }
+
+  if (cmd === "status") {
+    const { clientIdSet, clientSecretSet } = appCredsState();
+    const stored = loadStored();
+    const pkgRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+    console.log(JSON.stringify({
+      ok: true,
+      env_file: existsSync(resolve(process.cwd(), ".env")) || existsSync(resolve(pkgRoot, ".env")),
+      client_id_set: clientIdSet,
+      client_secret_set: clientSecretSet,
+      connected: Boolean(stored?.refresh_token),
+      username: stored?.username || null,
+    }));
     process.exit(0);
   }
 

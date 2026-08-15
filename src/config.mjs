@@ -33,11 +33,23 @@ export function callbackUrl() {
   return `http://127.0.0.1:${callbackPort()}/callback`;
 }
 
+export function appCredsState() {
+  const clientId = (process.env.X_CLIENT_ID || "").trim();
+  const clientSecret = (process.env.X_CLIENT_SECRET || "").trim();
+  return {
+    clientId,
+    clientSecret,
+    clientIdSet: Boolean(clientId),
+    clientSecretSet: Boolean(clientSecret),
+  };
+}
+
 export function appCreds() {
-  const clientId = process.env.X_CLIENT_ID;
-  const clientSecret = process.env.X_CLIENT_SECRET;
-  if (!clientId || !clientSecret) {
-    throw new Error("Set X_CLIENT_ID and X_CLIENT_SECRET (see .env.example)");
+  const { clientId, clientSecret, clientIdSet, clientSecretSet } = appCredsState();
+  if (!clientIdSet || !clientSecretSet) {
+    throw new Error(
+      "X_CLIENT_ID and X_CLIENT_SECRET are empty. Put them in .env from the X developer console, then run auth. Do not open X until both are set."
+    );
   }
   return { clientId, clientSecret };
 }
