@@ -1,8 +1,12 @@
 # grok-x-poster
 
-Give your Grok Bot (or any agent) the ability to post to X on your behalf.
+Tell your bot what to post. It posts as you.
 
-No frontend. No calendar. No daemon. You connect an X account once; the bot runs a tiny CLI when you tell it to post.
+You type in chat. The bot shows the exact text. You say yes. It goes out.
+
+While you work, it can also stop and say this would be a good post, with a draft. Wave it off, or tell it to send.
+
+Under the hood it is a tiny CLI. After the one-time X setup, you should not have to run commands.
 
 You need an X developer account and a credit balance first. A zero balance returns 402.
 
@@ -42,19 +46,35 @@ npx grok-x-poster auth
 
 Approve the X page in the browser. Tokens are stored in `~/.config/grok-x-poster/credentials.json` (mode 0600), not in this repo.
 
-## 4. Post
+## 4. Post from chat
 
-```bash
-npx grok-x-poster whoami
-npx grok-x-poster post --text "hello from my agent"
-npx grok-x-poster thread --texts "first" --texts "second"
-```
+Talk to the bot the way you talk to a person.
 
-## Grok Bot / agents
+- Post that we shipped the lounge.
+- Thread these two lines for me.
+- Yeah, send that.
 
-See [SKILL.md](SKILL.md). The agent should always confirm the exact text with you before posting, and must never print secrets.
+It writes the exact text back to you and waits. Nothing goes to X until you confirm that wording.
 
-Scheduling is a routine or cron that later runs `post`. This package does not keep a process running.
+If credits are empty it says so (402) and stops. Load more in Billing. Do not have it retry in a loop.
+
+## Radar
+
+The other skill is [RADAR.md](RADAR.md). While you are in the middle of work, the bot flags a moment that would make a good post. One short beat. Easy to wave off.
+
+Same rule: it never posts, or quote-replies, until you confirm the exact text.
+
+Drop both `SKILL.md` and `RADAR.md` into the agent's skills folder.
+
+## Under the hood
+
+The agent runs a CLI after you say yes. You can run it yourself. Most people never do.
+
+    npx grok-x-poster whoami
+    npx grok-x-poster post --text "exact text"
+    npx grok-x-poster thread --texts "first" --texts "second"
+
+Scheduling is a routine or cron that later asks the bot to post. This package does not keep a process running.
 
 ## License
 
