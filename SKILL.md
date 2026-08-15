@@ -36,6 +36,7 @@ Write the exact text back. Wait for a yes. Then run the CLI.
     npx agent-x-poster auth
     npx agent-x-poster whoami
     npx agent-x-poster post --text "exact text"
+    npx agent-x-poster post --text "exact text" --quote <id-or-url>
     npx agent-x-poster thread --texts "one" --texts "two"
 
 Parse stdout JSON. On `ok: false`, report `error` and stop.

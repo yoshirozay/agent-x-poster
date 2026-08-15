@@ -41,6 +41,14 @@ function argsAll(name) {
   return out;
 }
 
+function quoteId(raw) {
+  if (!raw) return null;
+  const fromUrl = String(raw).match(/status\/(\d+)/);
+  if (fromUrl) return fromUrl[1];
+  const digits = String(raw).match(/^(\d+)$/);
+  return digits ? digits[1] : null;
+}
+
 function usage() {
   return `agent-x-poster
 
@@ -49,6 +57,7 @@ function usage() {
   auth                         Connect an X account
   whoami                       Print the connected username
   post --text "..."            Publish a post
+  post --text "..." --quote <id-or-url>
   thread --texts "a" --texts "b"
   help                         This message
 `;
@@ -105,9 +114,11 @@ try {
 
   if (cmd === "post") {
     const text = arg("--text");
-    if (!text) throw new Error("Usage: agent-x-poster post --text \"...\"");
+    if (!text) throw new Error("Usage: agent-x-poster post --text \"...\" [--quote <id-or-url>]");
+    const quote = quoteId(arg("--quote"));
+    if (arg("--quote") && !quote) throw new Error("--quote needs a status id or x.com status URL");
     const client = await getAuthedClient();
-    const posted = await client.v2.tweet(text);
+    const posted = await client.v2.tweet(quote ? { text, quote_tweet_id: quote } : text);
     const username = await getUsername(client);
     const id = posted.data?.id;
     console.log(JSON.stringify({
@@ -116,6 +127,7 @@ try {
       username,
       url: id && username ? `https://x.com/${username}/status/${id}` : null,
       text,
+      quote_id: quote,
     }));
     process.exit(0);
   }
