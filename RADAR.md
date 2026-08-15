@@ -24,7 +24,7 @@ One short beat in chat. Show a draft of the exact text. Easy to wave off.
 
 Do not post. Do not quote-reply. Do not run the poster CLI unless they confirm that exact text.
 
-If they say yes, hand off to `SKILL.md` (Grok X poster) and follow its confirm-then-post rules.
+If they say yes, hand off to `SKILL.md` (Agent X poster) and follow its confirm-then-post rules.
 
 ## Voice
 

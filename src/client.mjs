@@ -4,7 +4,7 @@ import { appCreds, loadStored, saveStored } from "./config.mjs";
 export async function getAuthedClient() {
   const stored = loadStored();
   if (!stored?.refresh_token) {
-    throw new Error("Not connected. Run: npx grok-x-poster auth");
+    throw new Error("Not connected. Run: npx agent-x-poster auth");
   }
   const { clientId, clientSecret } = appCreds();
   const app = new TwitterApi({ clientId, clientSecret });

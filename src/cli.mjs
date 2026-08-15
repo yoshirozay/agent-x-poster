@@ -36,7 +36,7 @@ function argsAll(name) {
 }
 
 function usage() {
-  return `grok-x-poster
+  return `agent-x-poster
 
   auth                         Connect an X account
   whoami                       Print the connected username
@@ -75,7 +75,7 @@ try {
 
   if (cmd === "post") {
     const text = arg("--text");
-    if (!text) throw new Error("Usage: grok-x-poster post --text \"...\"");
+    if (!text) throw new Error("Usage: agent-x-poster post --text \"...\"");
     const client = await getAuthedClient();
     const posted = await client.v2.tweet(text);
     const me = await client.v2.me();
@@ -93,7 +93,7 @@ try {
 
   if (cmd === "thread") {
     const texts = argsAll("--texts").filter(Boolean);
-    if (texts.length < 2) throw new Error("Usage: grok-x-poster thread --texts \"one\" --texts \"two\"");
+    if (texts.length < 2) throw new Error("Usage: agent-x-poster thread --texts \"one\" --texts \"two\"");
     const client = await getAuthedClient();
     let replyTo = null;
     const ids = [];

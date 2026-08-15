@@ -1,4 +1,4 @@
-# grok-x-poster
+# agent-x-poster
 
 Tell your bot what to post. It posts as you.
 
@@ -13,8 +13,8 @@ You need an X developer account and a credit balance first. A zero balance retur
 ## Install
 
 ```bash
-git clone https://github.com/yoshirozay/grok-x-poster.git
-cd grok-x-poster
+git clone https://github.com/yoshirozay/agent-x-poster.git
+cd agent-x-poster
 npm install
 ```
 
@@ -41,10 +41,10 @@ There is no free posting tier for new apps. If the balance is empty, every call 
 ## 3. Connect your account
 
 ```bash
-npx grok-x-poster auth
+npx agent-x-poster auth
 ```
 
-Approve the X page in the browser. Tokens are stored in `~/.config/grok-x-poster/credentials.json` (mode 0600), not in this repo.
+Approve the X page in the browser. Tokens are stored in `~/.config/agent-x-poster/credentials.json` (mode 0600), not in this repo. An existing `~/.config/grok-x-poster` folder still works.
 
 ## 4. Post from chat
 
@@ -70,9 +70,9 @@ Drop both `SKILL.md` and `RADAR.md` into the agent's skills folder.
 
 The agent runs a CLI after you say yes. You can run it yourself. Most people never do.
 
-    npx grok-x-poster whoami
-    npx grok-x-poster post --text "exact text"
-    npx grok-x-poster thread --texts "first" --texts "second"
+    npx agent-x-poster whoami
+    npx agent-x-poster post --text "exact text"
+    npx agent-x-poster thread --texts "first" --texts "second"
 
 Scheduling is a routine or cron that later asks the bot to post. This package does not keep a process running.
 

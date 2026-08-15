@@ -1,9 +1,10 @@
 {
-  "name": "grok-x-poster",
+  "name": "agent-x-poster",
   "version": "0.1.0",
-  "description": "Give your Grok Bot (or any agent) the ability to post to X on your behalf",
+  "description": "Give any agent the ability to post to X on your behalf",
   "type": "module",
   "bin": {
+    "agent-x-poster": "./src/cli.mjs",
     "grok-x-poster": "./src/cli.mjs"
   },
   "engines": {
@@ -12,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yoshirozay/grok-x-poster.git"
+    "url": "https://github.com/yoshirozay/agent-x-poster.git"
   },
   "dependencies": {
     "twitter-api-v2": "^1.29.0"

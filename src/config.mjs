@@ -10,7 +10,11 @@ export const SCOPES = [
 ];
 
 export function credsDir() {
-  return join(homedir(), ".config", "grok-x-poster");
+  const next = join(homedir(), ".config", "agent-x-poster");
+  const prev = join(homedir(), ".config", "grok-x-poster");
+  if (existsSync(join(next, "credentials.json"))) return next;
+  if (existsSync(join(prev, "credentials.json"))) return prev;
+  return next;
 }
 
 export function credsPath() {
@@ -18,7 +22,11 @@ export function credsPath() {
 }
 
 export function callbackPort() {
-  return Number(process.env.GROK_X_POSTER_CALLBACK_PORT || 8787);
+  return Number(
+    process.env.AGENT_X_POSTER_CALLBACK_PORT
+    || process.env.GROK_X_POSTER_CALLBACK_PORT
+    || 8787
+  );
 }
 
 export function callbackUrl() {
