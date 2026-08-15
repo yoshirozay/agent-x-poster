@@ -36,7 +36,11 @@ Fill `X_CLIENT_ID` and `X_CLIENT_SECRET`.
 
 Open Billing in the [Developer Console](https://console.x.com). Add a payment method and buy credits.
 
-There is no free posting tier for new apps. If the balance is empty, every call fails with `402` and nothing posts. Buy a small amount to start. Each post and each `whoami` spends credits.
+There is no free posting tier for new apps. If the balance is empty, every call fails with `402` and nothing posts.
+
+Right now X charges **$0.015 per post**, or **$0.20** if the post contains a URL. `whoami` is a user read, about **$0.01**. Prices change. Check [Billing](https://console.x.com) or [developer.x.com](https://developer.x.com/#pricing).
+
+Buy a small amount to start. A few dollars covers a lot of plain posts.
 
 ## 3. Connect your account
 
